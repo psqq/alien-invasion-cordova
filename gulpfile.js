@@ -24,7 +24,7 @@ gulp.task('sass:watch', function () {
 });
 
 gulp.task('dev-build-js', () =>
-    gulp.src('src/index.js')
+    gulp.src('src/js/index.js')
         .pipe(named())
         .pipe(webpack({
             mode: 'development',
@@ -38,7 +38,7 @@ gulp.task('dev-build-js', () =>
 );
 
 gulp.task('build-js', () =>
-    gulp.src('src/index.js')
+    gulp.src('src/js/index.js')
         .pipe(named())
         .pipe(webpack({
             mode: 'production',
@@ -79,3 +79,5 @@ gulp.task('watch', () => {
 gulp.task('dev', gulp.series('clean', 'dev-build', 'cordova-build-browser', 'watch'));
 
 gulp.task('run-android', gulp.series('dev-build', 'cordova-run-android'));
+
+gulp.task('default', gulp.series('dev'));

@@ -13,6 +13,8 @@ const app = {
     async init() {
     },
     run() {
+        // eslint-disable-next-line no-undef
+        _startGame();
     },
 };
 
