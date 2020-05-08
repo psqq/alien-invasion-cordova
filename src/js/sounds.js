@@ -20,6 +20,7 @@ export function init() {
     addSound("explosion3", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion3.wav");
     addSound("explosion4", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion4.wav");
     addSound("fire", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/weaponfire6.wav");
+    addSound("music", "assets/opengameart/Orbital Colossus.mp3");
 }
 
 export function play(name, o) {
@@ -27,6 +28,9 @@ export function play(name, o) {
     o = o || {};
     if (o.volume) {
         sounds[name].volume(o.volume, id);
+    }
+    if (o.loop) {
+        sounds[name].loop(true, id);
     }
     return id;
 }
@@ -38,3 +42,4 @@ export function toggleMuteAll() {
 
 window.app = window.app || {};
 window.app.playSound = play;
+window.app.sounds = sounds;

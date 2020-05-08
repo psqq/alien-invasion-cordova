@@ -37,10 +37,10 @@ const app = {
                 alert("Please rotate the device and then click OK");
             }
         }
-        // eslint-disable-next-line no-undef
         _startGame();
         this.gameStarted = true;
         this.hideLoading();
+        sounds.play("music", { volume: 0.5, loop: true });
     },
     waitPortrait() {
         return new Promise((res, rej) => {
