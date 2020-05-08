@@ -432,6 +432,7 @@ var TouchControls = function () {
 
 var GamePoints = function () {
     Game.points = 0;
+    Game.highPoints = getHighPoints();
 
     var pointsLength = 8;
 
@@ -440,13 +441,27 @@ var GamePoints = function () {
         ctx.font = "bold 18px arial";
         ctx.fillStyle = "#FFFFFF";
 
-        var txt = "" + Game.points;
-        var i = pointsLength - txt.length, zeros = "";
+        var txtPoints = "" + Game.points;
+        var i = pointsLength - txtPoints.length, zeros = "";
         while (i-- > 0) { zeros += "0"; }
+        txtPoints = zeros + txtPoints;
 
-        ctx.fillText(zeros + txt, 10, 20);
+        var txtHighPoints = "" + Game.highPoints;
+        i = pointsLength - txtHighPoints.length, zeros = "";
+        while (i-- > 0) { zeros += "0"; }
+        txtHighPoints = zeros + txtHighPoints;
+
+        var comparisonSign = "=";
+        if (Game.points < Game.highPoints) {
+            comparisonSign = "<";
+        }
+        if (Game.points > Game.highPoints) {
+            comparisonSign = ">";
+        }
+        txt = txtPoints + " " + comparisonSign + " " + txtHighPoints;
+
+        ctx.fillText(txt, 10, 20);
         ctx.restore();
-
     };
 
     this.step = function (dt) { };

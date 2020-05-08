@@ -70,12 +70,27 @@ var level1 = [
 
 
 var playGame = function () {
+    updateHighPoints(Game.points);
     var board = new GameBoard();
     board.add(new PlayerShip());
     board.add(new Level(level1, winGame));
     Game.setBoard(3, board);
     Game.setBoard(5, new GamePoints(0));
 };
+
+var HIGH_POINTS_KEY = "high-points";
+
+function updateHighPoints(points) {
+    var highPoints = getHighPoints();
+    if (points > highPoints) {
+        localStorage.setItem(HIGH_POINTS_KEY, points);
+    }
+}
+
+function getHighPoints() {
+    var highPoints = localStorage.getItem(HIGH_POINTS_KEY) || 0;
+    return parseInt(highPoints);
+}
 
 var winGame = function () {
     Game.setBoard(3, new TitleScreen("You win!",
