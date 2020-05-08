@@ -35,6 +35,7 @@ const app = {
         // eslint-disable-next-line no-undef
         _startGame();
         this.gameStarted = true;
+        this.hideLoading();
     },
     waitPortrait() {
         return new Promise((res, rej) => {
@@ -53,6 +54,10 @@ const app = {
             };
             setTimeout(go, 300);
         });
+    },
+    hideLoading() {
+        document.querySelector("#loading").classList.add('hidden');
+        document.querySelector("#container").classList.remove('hidden');
     }
 };
 
