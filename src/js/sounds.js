@@ -16,6 +16,9 @@ function addSound(name, www_fn, loop = false, volume = 1) {
 
 export function init() {
     addSound("explosion1", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion1.wav");
+    addSound("explosion2", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion2.wav");
+    addSound("explosion3", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion3.wav");
+    addSound("explosion4", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion4.wav");
     addSound("fire", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/weaponfire6.wav");
 }
 

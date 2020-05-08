@@ -99,6 +99,7 @@ var winGame = function () {
 };
 
 var loseGame = function () {
+    app.playSound('explosion1', { volume: 1 });
     Game.setBoard(3, new TitleScreen("You lose!",
         "Press fire to play again",
         playGame));
@@ -280,6 +281,7 @@ Enemy.prototype.step = function (dt) {
 Enemy.prototype.hit = function (damage) {
     this.health -= damage;
     if (this.health <= 0) {
+        app.playSound('explosion4', { volume: 0.8 });
         if (this.board.remove(this)) {
             Game.points += this.points || 100;
             this.board.add(new Explosion(this.x + this.w / 2,

@@ -2,6 +2,8 @@
 /platforms
 /plugins
 
-www/*
+/www/*
 
 /yarn-error.log
+
+/.vscode
