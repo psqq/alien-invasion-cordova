@@ -2,9 +2,11 @@ const path = require('path');
 const gulp = require('gulp');
 const shell = require('gulp-shell');
 const sass = require('gulp-sass');
-const webpack = require('webpack-stream');
+const webpackStream = require('webpack-stream');
 const named = require('vinyl-named');
 const clean = require('gulp-clean');
+const uglify = require('gulp-uglify');
+const webpack = require('webpack');
 
 gulp.task('clean', function () {
     return gulp.src('www', { read: false, allowEmpty: true })
@@ -26,7 +28,7 @@ gulp.task('sass:watch', function () {
 gulp.task('dev-build-js', () =>
     gulp.src('src/js/index.js')
         .pipe(named())
-        .pipe(webpack({
+        .pipe(webpackStream({
             mode: 'development',
             output: {
                 path: path.resolve(__dirname, 'www/js'),
@@ -40,14 +42,28 @@ gulp.task('dev-build-js', () =>
 gulp.task('build-js', () =>
     gulp.src('src/js/index.js')
         .pipe(named())
-        .pipe(webpack({
+        .pipe(webpackStream({
             mode: 'production',
             output: {
                 path: path.resolve(__dirname, 'www/js'),
                 filename: 'index.js'
             },
+            module: {
+                rules: [
+                    {
+                        test: /\.(js)$/,
+                        exclude: /(node_modules)/,
+                        loader: 'babel-loader',
+                        query: {
+                            presets: ["@babel/preset-env"]
+                        }
+                    }
+                ]
+            },
         }))
         .pipe(gulp.dest('www/js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/'))
 );
 
 gulp.task('html', () =>
