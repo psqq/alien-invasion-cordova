@@ -1,3 +1,5 @@
+import * as sounds from './sounds';
+
 
 const app = {
     gameStarted: false,
@@ -10,6 +12,7 @@ const app = {
         await this.run();
     },
     async preload() {
+        sounds.init();
     },
     async init() {
         window.screen.orientation.lock('portrait');
