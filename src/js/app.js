@@ -16,6 +16,8 @@ const app = {
     },
     async init() {
         window.screen.orientation.lock('portrait');
+        // eslint-disable-next-line no-undef
+        console.log(device);
     },
     isPortrait() {
         return screen.orientation.type === 'portrait' || screen.orientation.type === 'portrait-primary' || screen.orientation.type === 'portrait-secondary';
