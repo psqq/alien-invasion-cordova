@@ -11,8 +11,17 @@
 </head>
 
 <body class="black-bg">
-    <div id='loading' class=" fullscreen center black-bg white-text">
+    <div id='loading' class="fullscreen center black-bg white-text">
         Loading...
+    </div>
+    <div id='settings' class="fullscreen center black-bg white-text hidden">
+        <div>
+            <h1>Settings</h1>
+            <p>Sounds</p>
+            <input type="range" id="sounds-volume" min="0" max="10" value="10">
+            <p>Music</p>
+            <input type="range" id="music-volume" min="0" max="10" value="10">
+        </div>
     </div>
     <div id='container' class="hidden">
         <canvas id='game' width='320' height='480'></canvas>

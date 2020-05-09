@@ -99,7 +99,7 @@ var winGame = function () {
 };
 
 var loseGame = function () {
-    app.playSound('explosion1', { volume: 1 });
+    app.playSound('explosion1');
     Game.setBoard(3, new TitleScreen("You lose!",
         "Press fire to play again",
         playGame));
@@ -188,7 +188,7 @@ var PlayerShip = function () {
         this.reload -= dt;
         if (Game.keys['fire'] && this.reload < 0) {
             Game.keys['fire'] = false;
-            app.playSound('fire', { volume: 1 });
+            app.playSound('fire');
             this.reload = this.reloadTime;
 
             this.board.add(new PlayerMissile(this.x, this.y + this.h / 2));
@@ -281,7 +281,7 @@ Enemy.prototype.step = function (dt) {
 Enemy.prototype.hit = function (damage) {
     this.health -= damage;
     if (this.health <= 0) {
-        app.playSound('explosion4', { volume: 0.8 });
+        app.playSound('explosion4');
         if (this.board.remove(this)) {
             Game.points += this.points || 100;
             this.board.add(new Explosion(this.x + this.w / 2,

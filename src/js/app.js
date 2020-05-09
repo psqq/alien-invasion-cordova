@@ -1,4 +1,5 @@
 import * as sounds from './sounds';
+import * as settings from './settings';
 
 
 const app = {
@@ -16,8 +17,10 @@ const app = {
     },
     async init() {
         window.screen.orientation.lock('portrait');
-        // eslint-disable-next-line no-undef
-        console.log(device);
+        document.querySelector(".settings-btn").addEventListener("click", () => {
+            settings.toggleSettings();
+        });
+        settings.init();
     },
     isPortrait() {
         return screen.orientation.type === 'portrait' || screen.orientation.type === 'portrait-primary' || screen.orientation.type === 'portrait-secondary';
@@ -40,7 +43,7 @@ const app = {
         _startGame();
         this.gameStarted = true;
         this.hideLoading();
-        sounds.play("music", { volume: 0.5, loop: true });
+        sounds.play("music");
     },
     waitPortrait() {
         return new Promise((res, rej) => {
@@ -63,7 +66,7 @@ const app = {
     hideLoading() {
         document.querySelector("#loading").classList.add('hidden');
         document.querySelector("#container").classList.remove('hidden');
-    }
+    },
 };
 
 export default app;
