@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="game" width="320" height="480"></canvas>
+    <script>
+        const can = document.querySelector('#game');
+        const ctx = can.getContext('2d');
+
+        let w = can.width;
+        let h = can.height;
+
+        function f1(t) {
+            return {
+                x: t / 100,
+                y: t / 100,
+            };
+        }
+
+        function makeFunc({ x0 = 0, y0 = 0, A = 0, B = 0, C = 0, D = 0, E = 0, F = 0, G = 0, H = 0 }) {
+            return function f(t) {
+                let x, y;
+                if (C == 0) {
+                    x = x0 + t * (A + B * Math.sin(D));
+                } else {
+                    x = x0 + A * t - (B / C) * Math.cos(C * t + D);
+                }
+                if (G == 0) {
+                    y = y0 + t * (E + F * Math.sin(H));
+                } else {
+                    y = y0 + E * t - (F / G) * Math.cos(G * t + H);
+                }
+                return { x, y };
+            };
+        }
+
+        class Graph {
+            constructor(f) {
+                this.f = f;
+                this.t = 0;
+                this.pos = this.f(this.t);
+            }
+            update() {
+                this.t += dt / 1000;
+            }
+            draw() {
+                const p = this.f(this.t);
+                drawLine({
+                    x1: this.pos.x, y1: this.pos.y,
+                    x2: p.x, y2: p.y,
+                });
+                this.pos = p;
+            }
+        }
+
+        function drawLine(o = {}) {
+            o = Object.assign({
+                color: 'black',
+                width: 1,
+            }, o);
+            ctx.beginPath();
+            ctx.moveTo(o.x1, o.y1);
+            ctx.lineTo(o.x2, o.y2);
+            ctx.stroke();
+        }
+
+        function drawLine2(x1, y1, x2, y2, color, width) {
+            drawLine({ x1, y1, x2, y2, color, width });
+        }
+
+        var t = 0, prevT = 0, dt = 0;
+        var g1 = new Graph(f1);
+        var gStep = new Graph(makeFunc({
+            x0: w / 2,
+            y0: 0,
+            B: 150, C: 1.2, E: 75,
+        }));
+        var gCircle = new Graph(makeFunc({
+            x0: w / 2 + w / 4,
+            y0: 0,
+            A: 0, B: -w / 4, C: 1, E: 20, F: 100, G: 1, H: Math.PI / 2
+        }));
+        var gLtr = new Graph(makeFunc({
+            x0: w / 2 - w / 4,
+            y0: 0,
+            A: 0, B: w / 4, C: 1, D: 0,
+            E: 80, F: 0, G: 0, H: 0,
+            missiles: 2
+        }));
+
+        function update() {
+            gLtr.update();
+            gLtr.draw();
+        }
+
+        function go() {
+            t = performance.now();
+            dt = t - prevT;
+            update();
+            prevT = t;
+            requestAnimationFrame(go);
+        }
+
+        prevT = performance.now();
+        requestAnimationFrame(go);
+
+    </script>
+</body>
+
+</html>

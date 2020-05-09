@@ -10,28 +10,38 @@ var sprites = {
     enemy_missile: { sx: 9, sy: 42, w: 3, h: 20, frame: 1, }
 };
 
-var enemies = {
-    straight: {
-        x: 0, y: -50, sprite: 'enemy_ship', health: 10,
-        E: 100
-    },
-    ltr: {
-        x: 0, y: -100, sprite: 'enemy_purple', health: 10,
-        B: 75, C: 1, E: 100, missiles: 2
-    },
-    circle: {
-        x: 250, y: -50, sprite: 'enemy_circle', health: 10,
-        A: 0, B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI / 2
-    },
-    wiggle: {
-        x: 100, y: -50, sprite: 'enemy_bee', health: 20,
-        B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2
-    },
-    step: {
-        x: 0, y: -50, sprite: 'enemy_circle', health: 10,
-        B: 150, C: 1.2, E: 75
-    }
-};
+var enemies = null;
+
+function initEnemies(w, h) {
+    enemies = {
+        straight: {
+            x: 0, y: -50, sprite: 'enemy_ship', health: 10,
+            E: 100
+        },
+        ltr: {
+            sprite: 'enemy_purple', health: 10,
+            x: w / 2 - w / 4,
+            y: -43,
+            A: 0, B: w / 4, C: 1, D: 0,
+            E: 80, F: 0, G: 0, H: 0,
+            missiles: 2
+        },
+        circle: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 + w / 4 - 32,
+            y: -33,
+            A: 0, B: -w / 4, C: 1, E: 20, F: 100, G: 1, H: Math.PI / 2
+        },
+        wiggle: {
+            x: 100, y: -50, sprite: 'enemy_bee', health: 20,
+            B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2
+        },
+        step: {
+            x: w / 2 - 16, y: -33, sprite: 'enemy_circle', health: 10,
+            B: 150, C: 1.2, E: 75
+        },
+    };
+}
 
 var OBJECT_PLAYER = 1,
     OBJECT_PLAYER_PROJECTILE = 2,
@@ -55,19 +65,24 @@ var startGame = function () {
         playGame));
 };
 
-var level1 = [
-    // Start,   End, Gap,  Type,   Override
-    [0, 4000, 500, 'step'],
-    [6000, 13000, 800, 'ltr'],
-    [10000, 16000, 400, 'circle'],
-    [17800, 20000, 500, 'straight', { x: 50 }],
-    [18200, 20000, 500, 'straight', { x: 90 }],
-    [18200, 20000, 500, 'straight', { x: 10 }],
-    [22000, 25000, 400, 'wiggle', { x: 150 }],
-    [22000, 25000, 400, 'wiggle', { x: 100 }]
-];
+var level1 = null;
 
-
+function initLevels(w, h) {
+    level1 = [
+        // Start,   End, Gap,  Type,   Override
+        [0, 4000, 500, 'step'],
+        [6000, 13000, 800, 'ltr'],
+        [10000, 16000, 400, 'circle'],
+        [17800, 20000, 500, 'straight', { x: 3 / 4 * w - 21 }],
+        [18200, 20000, 500, 'straight', { x: 3 / 4 * w + 40 - 21 }],
+        [18200, 20000, 500, 'straight', { x: 3 / 4 * w - 40 - 21 }],
+        [17800, 20000, 500, 'straight', { x: 1 / 4 * w - 21 }],
+        [18200, 20000, 500, 'straight', { x: 1 / 4 * w + 40 - 21 }],
+        [18200, 20000, 500, 'straight', { x: 1 / 4 * w - 40 - 21 }],
+        [22000, 25000, 400, 'wiggle', { x: w / 2 - 25 - 37 / 2 }],
+        [22000, 25000, 400, 'wiggle', { x: w / 2 + 25 - 37 / 2 }]
+    ];
+}
 
 var playGame = function () {
     updateHighPoints(Game.points);
@@ -201,6 +216,7 @@ PlayerShip.prototype = new Sprite();
 PlayerShip.prototype.type = OBJECT_PLAYER;
 
 PlayerShip.prototype.hit = function (damage) {
+    return;
     if (this.board.remove(this)) {
         loseGame();
     }
@@ -232,6 +248,8 @@ var Enemy = function (blueprint, override) {
     this.merge(this.baseParameters);
     this.setup(blueprint.sprite, blueprint);
     this.merge(override);
+    this.x0 = this.x;
+    this.y0 = this.y;
 };
 
 Enemy.prototype = new Sprite();
@@ -247,11 +265,24 @@ Enemy.prototype.baseParameters = {
 Enemy.prototype.step = function (dt) {
     this.t += dt;
 
-    this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
-    this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
+    // this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
+    // this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
 
-    this.x += this.vx * dt;
-    this.y += this.vy * dt;
+    if (this.C == 0) {
+        this.x = this.x0 + this.t * (this.A + this.B * Math.sin(this.D));
+    } else {
+        this.x = this.x0 + this.A * this.t - (this.B / this.C) * Math.cos(this.C * this.t + this.D);
+    }
+    if (this.G == 0) {
+        this.y = this.y0 + this.t * (this.E + this.F * Math.sin(this.H));
+    } else {
+        this.y = this.y0 + this.E * this.t - (this.F / this.G) * Math.cos(this.G * this.t + this.H);
+    }
+
+    // this.x += this.vx * dt;
+    // this.y += this.vy * dt;
+
+    // console.log(this.sprite, this.x, this.y);
 
     var collision = this.board.collide(this, OBJECT_PLAYER);
     if (collision) {
@@ -272,8 +303,8 @@ Enemy.prototype.step = function (dt) {
     this.reload -= dt;
 
     if (this.y > Game.height ||
-        this.x < -this.w ||
-        this.x > Game.width) {
+        this.x < -Game.width ||
+        this.x > 2 * Game.width) {
         this.board.remove(this);
     }
 };
@@ -328,5 +359,8 @@ Explosion.prototype.step = function (dt) {
 };
 
 function _startGame() {
+    var w = window.innerWidth, h = window.innerHeight;
+    initEnemies(w, h);
+    initLevels(w, h);
     Game.initialize("game", sprites, startGame);
 }

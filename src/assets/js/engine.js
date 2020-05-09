@@ -460,7 +460,7 @@ var GamePoints = function () {
         if (Game.points > Game.highPoints) {
             comparisonSign = ">";
         }
-        txt = txtPoints + " " + comparisonSign + " " + txtHighPoints;
+        txt = txtPoints; // + " " + comparisonSign + " " + txtHighPoints;
 
         ctx.fillText(txt, 10, 20);
         ctx.restore();
