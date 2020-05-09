@@ -164,9 +164,18 @@ var SpriteSheet = new function () {
     return this;
 };
 
+var firstFlag = true;
+
 var TitleScreen = function TitleScreen(title, subtitle, callback) {
     var up = false;
+    var timeout = firstFlag ? 0 : 1;
+    firstFlag = false;
+
     this.step = function (dt) {
+        timeout -= dt;
+        if (timeout > 0) {
+            return;
+        }
         if (!Game.keys['fire']) up = true;
         if (up && Game.keys['fire'] && callback) callback();
     };
