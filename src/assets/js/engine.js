@@ -74,6 +74,7 @@ var Game = new function () {
         }, false);
     };
 
+    this.pause = false;
 
     var lastTime = new Date().getTime();
     var maxTime = 1 / 30;
@@ -83,11 +84,12 @@ var Game = new function () {
         requestAnimationFrame(Game.loop);
         var dt = (curTime - lastTime) / 1000;
         if (dt > maxTime) { dt = maxTime; }
-
-        for (var i = 0, len = boards.length; i < len; i++) {
-            if (boards[i]) {
-                boards[i].step(dt);
-                boards[i].draw(Game.ctx);
+        if (!Game.pause) {
+            for (var i = 0, len = boards.length; i < len; i++) {
+                if (boards[i]) {
+                    boards[i].step(dt);
+                    boards[i].draw(Game.ctx);
+                }
             }
         }
         lastTime = curTime;

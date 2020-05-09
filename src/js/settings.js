@@ -39,12 +39,14 @@ export function showSettings() {
     document.querySelector("#settings").classList.remove('hidden');
     document.querySelector("#container").classList.add('hidden');
     settingsShowed = true;
+    Game.pause = true;
 }
 
 export function hideSettings() {
     document.querySelector("#settings").classList.add('hidden');
     document.querySelector("#container").classList.remove('hidden');
     settingsShowed = false;
+    Game.pause = false;
 }
 
 export function toggleSettings() {
