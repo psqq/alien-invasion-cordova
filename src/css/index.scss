@@ -34,17 +34,26 @@ body {
     display: none;
 }
 
-.settings-btn {
+@mixin global-btn {
     position: absolute;
     z-index: 100;
     top: 0;
     right: 0;
+
+    img {
+        width: 35px;
+        height: 35px;
+        padding: 15px;
+    }
 }
 
-.settings-btn img {
-    width: 35px;
-    height: 35px;
-    padding: 15px;
+.settings-btn {
+    @include global-btn;
+}
+
+.score-btn {
+    @include global-btn;
+    top: 50px;
 }
 
 #container {
