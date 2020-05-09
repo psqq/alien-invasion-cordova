@@ -19,11 +19,12 @@
         "cordova-plugin-file": "^6.0.2",
         "cordova-plugin-media": "^5.0.3",
         "cordova-plugin-screen-orientation": "^3.0.2",
-        "es6-promise-plugin": "^4.2.2",
-        "nipplejs": "^0.8.5"
+        "es6-promise-plugin": "^4.2.2"
     },
     "devDependencies": {
+        "@babel/runtime": "^7.9.6",
         "@babel/core": "^7.9.6",
+        "@babel/plugin-transform-runtime": "^7.9.6",
         "@babel/preset-env": "^7.9.6",
         "babel-core": "^6.26.3",
         "babel-loader": "^8.1.0",

@@ -55,7 +55,15 @@ gulp.task('build-js', () =>
                         exclude: /(node_modules)/,
                         loader: 'babel-loader',
                         query: {
-                            presets: ["@babel/preset-env"]
+                            presets: ["@babel/preset-env"],
+                            "plugins": [
+                                [
+                                    "@babel/plugin-transform-runtime",
+                                    {
+                                        "regenerator": true
+                                    }
+                                ]
+                            ],
                         }
                     }
                 ]
@@ -63,7 +71,7 @@ gulp.task('build-js', () =>
         }))
         .pipe(gulp.dest('www/js'))
         .pipe(uglify())
-        .pipe(gulp.dest('./public/'))
+        .pipe(gulp.dest('www/js'))
 );
 
 gulp.task('html', () =>
@@ -94,6 +102,6 @@ gulp.task('watch', () => {
 
 gulp.task('dev', gulp.series('clean', 'dev-build', 'cordova-build-browser', 'watch'));
 
-gulp.task('run-android', gulp.series('dev-build', 'cordova-run-android'));
+gulp.task('run-android', gulp.series('clean', 'build', 'cordova-run-android', 'clean', 'dev-build'));
 
 gulp.task('default', gulp.series('dev'));
