@@ -6,32 +6,39 @@ var sounds = {};
 var groups = { all: [] };
 
 function addSound(name, www_fn, { loop = false, volume = 1, group = null }) {
-    var fn = www_fn;
-    if (device.platform == "Android") {
-        fn = "file:///android_asset/www/" + www_fn;
-    } else if (device.platform == "browser") {
-        fn = "../" + www_fn;
-    }
-    sounds[name] = {
-        howl: new Howl({ src: [fn], loop, volume }),
-        volume,
-        loop,
-        group,
-    };
-    if (group) {
-        if (!groups[group]) groups[group] = [];
-        groups[group].push(sounds[name]);
-    }
-    groups["all"].push(sounds[name]);
+    return new Promise((res, rej) => {
+        var fn = www_fn;
+        if (device.platform == "Android") {
+            fn = "file:///android_asset/www/" + www_fn;
+        } else if (device.platform == "browser") {
+            fn = "../" + www_fn;
+        }
+        sounds[name] = {
+            howl: new Howl({ src: [fn], loop, volume }),
+            volume,
+            loop,
+            group,
+        };
+        sounds[name].howl.once('load', () => res());
+        sounds[name].howl.once('loaderror', (err) => rej(err));
+        if (group) {
+            if (!groups[group]) groups[group] = [];
+            groups[group].push(sounds[name]);
+        }
+        groups["all"].push(sounds[name]);
+    });
 }
 
-export function init() {
-    addSound("explosion1", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion1.wav", { group: 'sounds' });
-    addSound("explosion2", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion2.wav", { group: 'sounds' });
-    addSound("explosion3", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion3.wav", { group: 'sounds' });
-    addSound("explosion4", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion4.wav", { group: 'sounds' });
-    addSound("fire", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/weaponfire6.wav", { group: 'sounds' });
-    addSound("music", "assets/opengameart/Orbital Colossus.mp3", { group: 'music', loop: true });
+export async function init() {
+    const promises = [
+        addSound("explosion1", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion1.wav", { group: 'sounds' }),
+        addSound("explosion2", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion2.wav", { group: 'sounds' }),
+        addSound("explosion3", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion3.wav", { group: 'sounds' }),
+        addSound("explosion4", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/explosion4.wav", { group: 'sounds' }),
+        addSound("fire", "assets/opengameart/space-battle-game-sounds-astromenace/sfx/weaponfire6.wav", { group: 'sounds' }),
+        addSound("music", "assets/opengameart/Orbital Colossus.mp3", { group: 'music', loop: true }),
+    ];
+    await Promise.all(promises);
 }
 
 export function play(name, o) {

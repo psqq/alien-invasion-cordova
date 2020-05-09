@@ -146,9 +146,8 @@ var SpriteSheet = new function () {
 
     this.load = function (spriteData, callback) {
         this.map = spriteData;
-        this.image = new Image();
-        this.image.onload = callback;
-        this.image.src = 'assets/images/sprites.png';
+        this.image = window.app.images.sprites.img;
+        callback();
     };
 
     this.draw = function (ctx, sprite, x, y, frame) {

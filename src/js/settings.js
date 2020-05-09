@@ -33,6 +33,9 @@ export function init() {
         applySettings();
         saveSettings();
     });
+    document.querySelector(".settings-btn").addEventListener("click", () => {
+        toggleSettings();
+    });
 }
 
 export function showSettings() {
