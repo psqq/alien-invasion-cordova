@@ -92,6 +92,9 @@
 
         var t = 0, prevT = 0, dt = 0;
         var g1 = new Graph(f1);
+        //------------------------------
+        // STEP
+        //------------------------------
         var gStep_full = new Graph(makeFunc({
             sprite: 'enemy_circle', health: 10,
             x: w / 2 - sprites.enemy_circle.w / 2,
@@ -120,19 +123,112 @@
             A: 0, B: w / 4 - sprites.enemy_circle.w / 2, C: 1, D: 0,
             E: 75,
         }));
-        var gCircle = new Graph(makeFunc({
-            x: w / 2 + w / 4,
+        //------------------------------
+        // CIRCLE
+        //------------------------------
+        var gCircle_right = new Graph(makeFunc({
+            x: w / 2 + w / 4 - sprites.enemy_circle.w / 2,
             y: 0,
-            A: 0, B: -w / 4, C: 1, E: 20, F: 100, G: 1, H: Math.PI / 2
+            A: 0, B: -w / 4 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
         }));
-        var gLtr = new Graph(makeFunc({
-            x: w / 2 - w / 4,
+        var gCircle_left = new Graph(makeFunc({
+            x: w / 4 - sprites.enemy_circle.w / 2,
             y: 0,
-            A: 0, B: w / 4, C: 1, D: 0,
+            A: 0, B: -w / 4 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        }));
+        var gCircle_center = new Graph(makeFunc({
+            x: w / 2 - sprites.enemy_circle.w / 2,
+            y: 0,
+            A: 0, B: -w / 4 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        }));
+        var gCircle = new Graph(makeFunc({
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 - sprites.enemy_circle.w / 2,
+            y: 0,
+            A: 0, B: -w / 2 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        }));
+        //------------------------------
+        // CIRCLE
+        //------------------------------
+        var gWiggle_right = new Graph(makeFunc({
+            sprite: 'enemy_bee', health: 20,
+            x: w - w / 4,
+            y: 0,
+            A: 0, B: w / 4, C: 4, D: 0,
+            E: 100,
+            firePercentage: 0.001, missiles: 2
+        }));
+        var gWiggle_left = new Graph(makeFunc({
+            sprite: 'enemy_bee', health: 20,
+            x: w / 4,
+            y: 0,
+            A: 0, B: w / 4, C: 4, D: 0,
+            E: 100,
+            firePercentage: 0.001, missiles: 2
+        }));
+        var gWiggle_center = new Graph(makeFunc({
+            sprite: 'enemy_bee', health: 20,
+            x: w / 2,
+            y: 0,
+            A: 0, B: w / 4, C: 4, D: 0,
+            E: 100,
+            firePercentage: 0.001, missiles: 2
+        }));
+        //------------------------------
+        // STRAIGHT
+        //------------------------------
+        var gStraight_center = new Graph(makeFunc({
+            sprite: 'enemy_ship', health: 10,
+            x: w / 2 - sprites.enemy_ship.w / 2,
+            y: 0,
+            E: 100
+        }));
+        var gStraight_left = new Graph(makeFunc({
+            sprite: 'enemy_ship', health: 10,
+            x: w / 4 - sprites.enemy_ship.w / 2,
+            y: 0,
+            E: 100
+        }));
+        var gStraight_right = new Graph(makeFunc({
+            sprite: 'enemy_ship', health: 10,
+            x: w - w / 4 - sprites.enemy_ship.w / 2,
+            y: 0,
+            E: 100
+        }));
+        //------------------------------
+        // STRAIGHT
+        //------------------------------
+        var gLtr_left = new Graph(makeFunc({
+            sprite: 'enemy_purple', health: 10,
+            x: w / 2 - w / 4 - sprites.enemy_purple.w / 2,
+            y: 0,
+            A: 0, B: w / 4 - sprites.enemy_purple.w / 2, C: 1, D: 0,
             E: 80, F: 0, G: 0, H: 0,
             missiles: 2
         }));
-        var cur = gStep4;
+        var gLtr_right = new Graph(makeFunc({
+            sprite: 'enemy_purple', health: 10,
+            x: w - w / 4 - sprites.enemy_purple.w / 2,
+            y: 0,
+            A: 0, B: w / 4 - sprites.enemy_purple.w / 2, C: 1, D: 0,
+            E: 80, F: 0, G: 0, H: 0,
+            missiles: 2
+        }));
+        var gLtr_center = new Graph(makeFunc({
+            sprite: 'enemy_purple', health: 10,
+            x: w / 4 + w / 4 - sprites.enemy_purple.w / 2,
+            y: 0,
+            A: 0, B: w / 4 - sprites.enemy_purple.w / 2, C: 1, D: 0,
+            E: 80, F: 0, G: 0, H: 0,
+            missiles: 2
+        }));
+        //------------------------------
+        //------------------------------
+        var cur = gLtr_center;
 
         function update() {
             cur.update();

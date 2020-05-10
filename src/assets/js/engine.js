@@ -304,7 +304,9 @@ Sprite.prototype.merge = function (props) {
 };
 
 Sprite.prototype.draw = function (ctx) {
-    SpriteSheet.draw(ctx, this.sprite, this.x, this.y, this.frame);
+    var DX = 0;
+    var DY = 0;
+    SpriteSheet.draw(ctx, this.sprite, DX + this.x, DY + this.y, this.frame);
 };
 
 Sprite.prototype.hit = function (damage) {

@@ -14,32 +14,117 @@ var enemies = null;
 
 function initEnemies(w, h) {
     enemies = {
-        straight: {
-            x: 0, y: -50, sprite: 'enemy_ship', health: 10,
-            E: 100
-        },
-        ltr: {
+        //------------------------------
+        //------------------------------
+        //------------------------------
+        // LTR
+        //------------------------------
+        ltr_left: {
             sprite: 'enemy_purple', health: 10,
-            x: w / 2 - w / 4,
-            y: -43,
-            A: 0, B: w / 4, C: 1, D: 0,
+            x: w / 2 - w / 4 - sprites.enemy_purple.w / 2,
+            y: -sprites.enemy_purple.h,
+            A: 0, B: w / 4 - sprites.enemy_purple.w / 2, C: 1, D: 0,
             E: 80, F: 0, G: 0, H: 0,
             missiles: 2
         },
-        circle: {
-            sprite: 'enemy_circle', health: 10,
-            x: w / 2 + w / 4 - 32,
-            y: -33,
-            A: 0, B: -w / 4, C: 1, D: 0,
-            E: 20, F: 100, G: 1, H: Math.PI / 2
+        ltr_right: {
+            sprite: 'enemy_purple', health: 10,
+            x: w - w / 4 - sprites.enemy_purple.w / 2,
+            y: -sprites.enemy_purple.h,
+            A: 0, B: w / 4 - sprites.enemy_purple.w / 2, C: 1, D: 0,
+            E: 80, F: 0, G: 0, H: 0,
+            missiles: 2
         },
-        wiggle: {
+        ltr_center: {
+            sprite: 'enemy_purple', health: 10,
+            x: w / 4 + w / 4 - sprites.enemy_purple.w / 2,
+            y: -sprites.enemy_purple.h,
+            A: 0, B: w / 4 - sprites.enemy_purple.w / 2, C: 1, D: 0,
+            E: 80, F: 0, G: 0, H: 0,
+            missiles: 2
+        },
+        //------------------------------
+        // STRAIGHT
+        //------------------------------
+        straight_left: {
+            sprite: 'enemy_ship', health: 10,
+            x: w / 4 - sprites.enemy_ship.w / 2,
+            y: -sprites.enemy_ship.h,
+            E: 100
+        },
+        straight_right: {
+            sprite: 'enemy_ship', health: 10,
+            x: w - w / 4 - sprites.enemy_ship.w / 2,
+            y: -sprites.enemy_ship.h,
+            E: 100
+        },
+        straight_center: {
+            sprite: 'enemy_ship', health: 10,
+            x: w / 2 - sprites.enemy_ship.w / 2,
+            y: -sprites.enemy_ship.h,
+            E: 100
+        },
+        //------------------------------
+        // WIGGLE
+        //------------------------------
+        wiggle_center: {
             sprite: 'enemy_bee', health: 20,
-            x: 100, y: -50,
-            A: 0, B: 50, C: 4, D: 0,
+            x: w / 2,
+            y: -sprites.enemy_bee.h,
+            A: 0, B: w / 4, C: 4, D: 0,
             E: 100,
             firePercentage: 0.001, missiles: 2
         },
+        wiggle_left: {
+            sprite: 'enemy_bee', health: 20,
+            x: w / 4,
+            y: -sprites.enemy_bee.h,
+            A: 0, B: w / 4, C: 4, D: 0,
+            E: 100,
+            firePercentage: 0.001, missiles: 2
+        },
+        wiggle_right: {
+            sprite: 'enemy_bee', health: 20,
+            x: w - w / 4,
+            y: -sprites.enemy_bee.h,
+            A: 0, B: w / 4, C: 4, D: 0,
+            E: 100,
+            firePercentage: 0.001, missiles: 2
+        },
+        //------------------------------
+        // CIRCLE
+        //------------------------------
+        circle: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: -w / 2 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        },
+        circle_left: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 4 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: -w / 4 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        },
+        circle_right: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 + w / 4 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: -w / 4 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        },
+        circle_center: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: -w / 4 + sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
+        },
+        //------------------------------
+        // STEP
+        //------------------------------
         step: {
             sprite: 'enemy_circle', health: 10,
             x: w / 2 - sprites.enemy_circle.w / 2,
@@ -68,6 +153,8 @@ function initEnemies(w, h) {
             A: 0, B: w / 4 - sprites.enemy_circle.w / 2, C: 1, D: 0,
             E: 75,
         },
+        //------------------------------
+        //------------------------------
     };
 }
 
@@ -103,22 +190,53 @@ function rand(a, b = null) {
         b = a;
         a = 0;
     }
-    return a + Math.floor(Math.random() * (b - a + 1));
+    return Math.round(a + Math.floor(Math.random() * (b - a + 1)));
 }
 
 function makeRandomLevelRow(prevEnd = 0, lvlNum = 0) {
     let row = [];
     let sleep = 500 + 100 * rand(0, 3);
     let start = prevEnd + sleep;
-    let gap = rand(300, 800);
-    const minCount = 3;
-    let count = rand(minCount, 1.5 * minCount + 3 + lvlNum);
-    let end = start + count * gap;
+    let gap = rand(330, 800);
+    const minCount = 1;
+    let count = rand(minCount + 0.8 * lvlNum, minCount + 1 + 1.3 * lvlNum);
     let type = '';
     let override = {};
+    let end = start + count * gap;
+    const pad = 3;
     let generators = [
         () => {
-            type = 'step';
+            type = 'ltr_left';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'ltr_right';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'ltr_center';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'straight_center';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'straight_left';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'straight_right';
             row.push(
                 [start, end, gap, type, override],
             );
@@ -136,19 +254,150 @@ function makeRandomLevelRow(prevEnd = 0, lvlNum = 0) {
             );
         },
         () => {
+            type = 'step';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
             type = 'step_center';
             row.push(
                 [start, end, gap, type, override],
             );
         },
+        () => {
+            type = 'circle';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'circle_left';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'circle_right';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'circle_center';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'wiggle_left';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'wiggle_right';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'wiggle_center';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'straight_center';
+            row.push(
+                [start, end, gap, type, {
+                    DX: -sprites.enemy_ship.w / 2 - pad
+                }],
+            );
+            row.push(
+                [start, end, gap, type, {
+                    DX: sprites.enemy_ship.w / 2 + pad
+                }],
+            );
+        },
+        () => {
+            type = 'straight_left';
+            row.push(
+                [start, end, gap, type, {
+                    DX: -sprites.enemy_ship.w / 2 - pad
+                }],
+            );
+            row.push(
+                [start, end, gap, type, {
+                    DX: sprites.enemy_ship.w / 2 + pad
+                }],
+            );
+        },
+        () => {
+            type = 'straight_right';
+            row.push(
+                [start, end, gap, type, {
+                    DX: -sprites.enemy_ship.w / 2 - pad
+                }],
+            );
+            row.push(
+                [start, end, gap, type, {
+                    DX: sprites.enemy_ship.w / 2 + pad
+                }],
+            );
+        },
+        () => {
+            type = 'ltr_left';
+            row.push(
+                [start, end, gap, type, {
+                    DX: -sprites.enemy_purple.w / 2 - pad
+                }],
+            );
+            row.push(
+                [start, end, gap, type, {
+                    DX: sprites.enemy_purple.w / 2 + pad
+                }],
+            );
+        },
+        () => {
+            type = 'ltr_right';
+            row.push(
+                [start, end, gap, type, {
+                    DX: -sprites.enemy_purple.w / 2 - pad
+                }],
+            );
+            row.push(
+                [start, end, gap, type, {
+                    DX: sprites.enemy_purple.w / 2 + pad
+                }],
+            );
+        },
+        () => {
+            type = 'ltr_center';
+            row.push(
+                [start, end, gap, type, {
+                    DX: -sprites.enemy_purple.w / 2 - pad
+                }],
+            );
+            row.push(
+                [start, end, gap, type, {
+                    DX: sprites.enemy_purple.w / 2 + pad
+                }],
+            );
+        },
     ];
-    generators[rand(generators.length - 1)]();
+    const genMin = 0;
+    const genMax = Math.max(0, Math.min(
+        generators.length - 1,
+        3 * lvlNum,
+    ));
+    generators[rand(genMin, genMax)]();
     return { sleep, start, end, gap, type, override, row };
 }
 
 function makeRandomLevel(lvlNum = 0) {
     let lvl = [];
-    let rows = 5 + lvlNum * 2;
+    let rows = Math.ceil(3 + lvlNum * 1.5);
     let time = 0;
     for (let i = 0; i < rows; i++) {
         let res = makeRandomLevelRow(time, lvlNum);
@@ -356,6 +605,8 @@ var PlayerShip = function () {
     this.x = Game.width / 2 - this.w / 2;
     this.y = Game.height - Game.playerOffset - this.h;
 
+    Game.playerShip = this;
+
     this.step = function (dt) {
         if (Game.keys['left']) { this.vx = -this.maxVel; }
         else if (Game.keys['right']) { this.vx = this.maxVel; }
@@ -383,7 +634,7 @@ PlayerShip.prototype = new Sprite();
 PlayerShip.prototype.type = OBJECT_PLAYER;
 
 PlayerShip.prototype.hit = function (damage) {
-    this.hp -= 10;
+    // this.hp -= 10;
     if (this.hp <= 0) {
         if (this.board.remove(this)) {
             loseGame();
@@ -417,6 +668,10 @@ var Enemy = function (blueprint, override) {
     this.merge(this.baseParameters);
     this.setup(blueprint.sprite, blueprint);
     this.merge(override);
+    var DX = this.DX || 0;
+    var DY = this.DY || 0;
+    this.x += DX;
+    this.y += DY;
     this.x0 = this.x;
     this.y0 = this.y;
 };
@@ -533,4 +788,9 @@ function _startGame() {
     initEnemies(w, h);
     initLevels(w, h);
     Game.initialize("game", sprites, startGame);
+    document.addEventListener('keydown', (ev) => {
+        if (ev.key == 'q') {
+            Game.playerShip.hp = -100;
+        }
+    });
 }
