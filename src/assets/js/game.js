@@ -454,6 +454,19 @@ var LevelTitleScreen = function LevelTitleScreen(lvlNum, callback) {
     };
 };
 
+var PlayerHitPoints = function PlayerHitPoints(playerShip, callback) {
+    this.step = function (dt) {
+        playerShip.hp -= dt * 0.1 * Game.level;
+        if (playerShip.hp <= 0) {
+            loseGame();
+        }
+    };
+    this.draw = function (ctx) {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(0, Game.height - 10, Game.width * (playerShip.hp / playerShip.maxHp), 10);
+    };
+};
+
 class LevelMaker {
     constructor(board) {
         this.nextState = 'level-title';
@@ -494,7 +507,9 @@ var playGame = function () {
     Game.level = 0;
     Game.difficulty = 0; // 0, 1 or 2
     var board = new GameBoard();
-    board.add(new PlayerShip());
+    Game.playerShip = new PlayerShip();
+    board.add(new PlayerHitPoints(Game.playerShip));
+    board.add(Game.playerShip);
     var lvlMaker = new LevelMaker(board);
     lvlMaker.step();
     Game.setBoard(3, board);
@@ -599,7 +614,7 @@ var Starfield = function (speed, opacity, numStars, clear) {
 };
 
 var PlayerShip = function () {
-    this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200, hp: 30, maxHp: 30 });
+    this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200, hp: 30, maxHp: 100 });
 
     this.reload = this.reloadTime;
     this.x = Game.width / 2 - this.w / 2;
@@ -634,12 +649,7 @@ PlayerShip.prototype = new Sprite();
 PlayerShip.prototype.type = OBJECT_PLAYER;
 
 PlayerShip.prototype.hit = function (damage) {
-    // this.hp -= 10;
-    if (this.hp <= 0) {
-        if (this.board.remove(this)) {
-            loseGame();
-        }
-    }
+    this.hp -= 10;
 };
 
 
@@ -740,6 +750,7 @@ Enemy.prototype.hit = function (damage) {
         if (this.board.remove(this)) {
             Game.points += this.points || 100;
             Game.score += this.points || 100;
+            Game.playerShip.hp = Math.min(Game.playerShip.hp + 0.1 + 0.2 * Game.level, Game.playerShip.maxHp);
             this.board.add(new Explosion(this.x + this.w / 2,
                 this.y + this.h / 2));
         }
@@ -791,6 +802,10 @@ function _startGame() {
     document.addEventListener('keydown', (ev) => {
         if (ev.key == 'q') {
             Game.playerShip.hp = -100;
+        }
+        if (ev.key == 'g') {
+            Game.playerShip.hp += 999999;
+            Game.playerShip.maxHp = Game.playerShip.hp;
         }
     });
 }

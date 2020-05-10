@@ -88,6 +88,8 @@ gulp.task('cordova-build-browser', shell.task('npx cordova build browser'));
 
 gulp.task('cordova-run-android', shell.task('npx cordova run android'));
 
+gulp.task('cordova-debug-build-android', shell.task('npx cordova build android'));
+
 gulp.task('dev-build', gulp.series('dev-build-js', 'sass', 'html', 'assets'));
 
 gulp.task('build', gulp.series('build-js', 'sass', 'html', 'assets'));
@@ -103,5 +105,7 @@ gulp.task('watch', () => {
 gulp.task('dev', gulp.series('clean', 'dev-build', 'cordova-build-browser', 'watch'));
 
 gulp.task('run-android', gulp.series('clean', 'build', 'cordova-run-android', 'clean', 'dev-build'));
+
+gulp.task('dev-build-android', gulp.series('clean', 'build', 'cordova-debug-build-android', 'clean', 'dev-build'));
 
 gulp.task('default', gulp.series('dev'));
