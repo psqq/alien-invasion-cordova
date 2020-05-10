@@ -24,7 +24,7 @@
         </div>
     </div>
     <div id='records' class="black-bg white-text hidden">
-        <div class="content">
+        <div class="content is-records hidden">
             <h1>Records</h1>
             <div class="grid center last-and-high-score">
                 <p>Last score: 12000</p>
@@ -41,27 +41,40 @@
                     <option value="value3">level</option>
                 </select>
             </p>
-            <table>
-                <thead>
-                    <th>Date</th>
-                    <th>Score</th>
-                    <th>Level</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>09.05.2020<br>20:53</td>
-                        <td>12000</td>
-                        <td>3</td>
-                    </tr>
-                    <tr>
-                        <td>09.05.2020<br>20:53</td>
-                        <td>12000</td>
-                        <td>3</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="grid center">
+                <table>
+                    <thead>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Level</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="content no-records hidden">
+            <h1>Records</h1>
+            <p>
+                No records! You must complete at least one game!
+            </p>
         </div>
     </div>
+    <script id="last-and-high-score-template" type="x-tmpl-mustache">
+        <p>Last score: {{ last.score }}</p>
+        <p>Last level: {{ last.level }}</p>
+        <p>High score: {{ high.score }}</p>
+        <p>High level: {{ high.level }}</p>
+    </script>
+    <script id="records-tbody-template" type="x-tmpl-mustache">
+        {{#all}}
+            <tr>
+                <td>{{date}}<br>{{time}}</td>
+                <td>{{score}}</td>
+                <td>{{level}}</td>
+            </tr>
+        {{/all}}
+    </script>
     <div id='container' class="hidden">
         <canvas id='game' width='320' height='480'></canvas>
     </div>
