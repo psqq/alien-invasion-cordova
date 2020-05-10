@@ -372,21 +372,54 @@ var TouchControls = function () {
     var gutterWidth = 10;
     var unitWidth = Game.width / 5;
     var blockWidth = unitWidth - gutterWidth;
+    var leftBtnImg = app.images["left-btn"].img;
+    var rightBtnImg = app.images["right-btn"].img;
+    var attackBtnImg = app.images["attack-btn"].img;
 
     this.drawSquare = function (ctx, x, y, txt, on) {
         ctx.globalAlpha = on ? 0.9 : 0.6;
-        ctx.fillStyle = "#CCC";
-        ctx.fillRect(x, y, blockWidth, blockWidth);
+        if (txt === "\u25C0") {
+            ctx.drawImage(
+                leftBtnImg,
+                0, 0,
+                leftBtnImg.width, leftBtnImg.height,
+                x, y,
+                blockWidth, blockWidth
+            )
+        }
+        if (txt === "\u25B6") {
+            ctx.drawImage(
+                rightBtnImg,
+                0, 0,
+                rightBtnImg.width, rightBtnImg.height,
+                x, y,
+                blockWidth, blockWidth
+            )
+        }
+        if (txt === "A") {
+            ctx.drawImage(
+                attackBtnImg,
+                0, 0,
+                attackBtnImg.width, attackBtnImg.height,
+                x, y,
+                blockWidth, blockWidth
+            )
+        }
+        // else {
+        //     ctx.globalAlpha = on ? 0.9 : 0.6;
+        //     ctx.fillStyle = "#CCC";
+        //     ctx.fillRect(x, y, blockWidth, blockWidth);
 
-        ctx.fillStyle = "#FFF";
-        ctx.globalAlpha = 1.0;
-        ctx.font = "bold " + (3 * unitWidth / 4) + "px arial";
+        //     ctx.fillStyle = "#FFF";
+        //     ctx.globalAlpha = 1.0;
+        //     ctx.font = "bold " + (3 * unitWidth / 4) + "px arial";
 
-        var txtSize = ctx.measureText(txt);
+        //     var txtSize = ctx.measureText(txt);
 
-        ctx.fillText(txt,
-            x + blockWidth / 2 - txtSize.width / 2,
-            y + 3 * blockWidth / 4 + 5);
+        //     ctx.fillText(txt,
+        //         x + blockWidth / 2 - txtSize.width / 2,
+        //         y + 3 * blockWidth / 4 + 5);
+        // }
     };
 
     this.draw = function (ctx) {

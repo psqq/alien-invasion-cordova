@@ -40,6 +40,9 @@ function addImage(name, url) {
 
 const images = {
     ...addImage('sprites'),
+    ...addImage('left-btn'),
+    ...addImage('right-btn'),
+    ...addImage('attack-btn'),
 };
 
 export default images;
