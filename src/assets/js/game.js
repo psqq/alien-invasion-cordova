@@ -30,15 +30,43 @@ function initEnemies(w, h) {
             sprite: 'enemy_circle', health: 10,
             x: w / 2 + w / 4 - 32,
             y: -33,
-            A: 0, B: -w / 4, C: 1, E: 20, F: 100, G: 1, H: Math.PI / 2
+            A: 0, B: -w / 4, C: 1, D: 0,
+            E: 20, F: 100, G: 1, H: Math.PI / 2
         },
         wiggle: {
-            x: 100, y: -50, sprite: 'enemy_bee', health: 20,
-            B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2
+            sprite: 'enemy_bee', health: 20,
+            x: 100, y: -50,
+            A: 0, B: 50, C: 4, D: 0,
+            E: 100,
+            firePercentage: 0.001, missiles: 2
         },
         step: {
-            x: w / 2 - 16, y: -33, sprite: 'enemy_circle', health: 10,
-            B: 150, C: 1.2, E: 75
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: w / 2 - sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 75,
+        },
+        step_left: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 4 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: w / 4 - sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 75,
+        },
+        step_right: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 2 + w / 4 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: w / 4 - sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 75,
+        },
+        step_center: {
+            sprite: 'enemy_circle', health: 10,
+            x: w / 4 + w / 4 - sprites.enemy_circle.w / 2,
+            y: -sprites.enemy_circle.h,
+            A: 0, B: w / 4 - sprites.enemy_circle.w / 2, C: 1, D: 0,
+            E: 75,
         },
     };
 }
@@ -65,10 +93,78 @@ var startGame = function () {
         playGame));
 };
 
-var level1 = null;
+var levels = {
+    w: 0, h: 0,
+    arr: [],
+};
+
+function rand(a, b = null) {
+    if (b == null) {
+        b = a;
+        a = 0;
+    }
+    return a + Math.floor(Math.random() * (b - a + 1));
+}
+
+function makeRandomLevelRow(prevEnd = 0, lvlNum = 0) {
+    let row = [];
+    let sleep = 500 + 100 * rand(0, 3);
+    let start = prevEnd + sleep;
+    let gap = rand(300, 800);
+    const minCount = 3;
+    let count = rand(minCount, 1.5 * minCount + 3 + lvlNum);
+    let end = start + count * gap;
+    let type = '';
+    let override = {};
+    let generators = [
+        () => {
+            type = 'step';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'step_left';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'step_right';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+        () => {
+            type = 'step_center';
+            row.push(
+                [start, end, gap, type, override],
+            );
+        },
+    ];
+    generators[rand(generators.length - 1)]();
+    return { sleep, start, end, gap, type, override, row };
+}
+
+function makeRandomLevel(lvlNum = 0) {
+    let lvl = [];
+    let rows = 5 + lvlNum * 2;
+    let time = 0;
+    for (let i = 0; i < rows; i++) {
+        let res = makeRandomLevelRow(time, lvlNum);
+        for (let r of res.row) {
+            lvl.push(r);
+        }
+        time = res.end;
+    }
+    return lvl;
+}
 
 function initLevels(w, h) {
-    level1 = [
+    levels.w = w;
+    levels.h = h;
+    levels.arr.push(makeRandomLevel());
+    levels.arr.push([
         // Start,   End, Gap,  Type,   Override
         [0, 4000, 500, 'step'],
         [6000, 13000, 800, 'ltr'],
@@ -81,14 +177,77 @@ function initLevels(w, h) {
         [18200, 20000, 500, 'straight', { x: 1 / 4 * w - 40 - 21 }],
         [22000, 25000, 400, 'wiggle', { x: w / 2 - 25 - 37 / 2 }],
         [22000, 25000, 400, 'wiggle', { x: w / 2 + 25 - 37 / 2 }]
-    ];
+    ]);
+}
+
+var LevelTitleScreen = function LevelTitleScreen(lvlNum, callback) {
+    var title = `Level ${lvlNum}`;
+    var x = -10000;
+    var speed = 200;
+    var maxSpeed = 400;
+    var self = this;
+    this.step = function (dt) {
+        x += speed * dt;
+        speed += 20 * dt;
+        speed = Math.min(speed, maxSpeed);
+        if (x > Game.width) {
+            callback(lvlNum, self);
+        }
+    };
+    this.draw = function (ctx) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 40px bangers";
+        var measure = ctx.measureText(title);
+        if (x < -2 * measure.width) {
+            x = -measure.width;
+        }
+        ctx.fillText(title, x, Game.height / 2);
+    };
+};
+
+class LevelMaker {
+    constructor(board) {
+        this.nextState = 'level-title';
+        this.lvlNum = 1;
+        this.curObj = null;
+        this.board = board;
+    }
+    step() {
+        if (this.nextState == 'level-title') {
+            this.curObj = new LevelTitleScreen(
+                this.lvlNum,
+                () => {
+                    this.board.remove(this.curObj);
+                    this.nextState = 'level';
+                    this.step();
+                }
+            );
+            this.board.add(this.curObj);
+        } else if (this.nextState == 'level') {
+            this.curObj = new Level(
+                makeRandomLevel(this.lvlNum),
+                () => {
+                    this.board.remove(this.curObj);
+                    this.nextState = 'level-title';
+                    Game.level = this.lvlNum;
+                    this.lvlNum += 1;
+                    this.step();
+                }
+            );
+            this.board.add(this.curObj);
+        }
+    }
 }
 
 var playGame = function () {
     updateHighPoints(Game.points);
+    Game.score = 0;
+    Game.level = 0;
+    Game.difficulty = 0; // 0, 1 or 2
     var board = new GameBoard();
     board.add(new PlayerShip());
-    board.add(new Level(level1, winGame));
+    var lvlMaker = new LevelMaker(board);
+    lvlMaker.step();
     Game.setBoard(3, board);
     Game.setBoard(5, new GamePoints(0));
 };
@@ -115,9 +274,18 @@ var winGame = function () {
 
 var loseGame = function () {
     app.playSound('explosion1');
-    Game.setBoard(3, new TitleScreen("You lose!",
-        "Press fire to play again",
-        playGame));
+    app.addRecord({
+        score: Game.score,
+        level: Game.level,
+    });
+    Game.setBoard(
+        3,
+        new TitleScreen(
+            `You complete ${Game.level} levels!`,
+            `And got ${Game.score} points!`,
+            playGame
+        )
+    );
 };
 
 var Starfield = function (speed, opacity, numStars, clear) {
@@ -182,7 +350,7 @@ var Starfield = function (speed, opacity, numStars, clear) {
 };
 
 var PlayerShip = function () {
-    this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200 });
+    this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200, hp: 30, maxHp: 30 });
 
     this.reload = this.reloadTime;
     this.x = Game.width / 2 - this.w / 2;
@@ -202,7 +370,6 @@ var PlayerShip = function () {
 
         this.reload -= dt;
         if (Game.keys['fire'] && this.reload < 0) {
-            Game.keys['fire'] = false;
             app.playSound('fire');
             this.reload = this.reloadTime;
 
@@ -216,9 +383,11 @@ PlayerShip.prototype = new Sprite();
 PlayerShip.prototype.type = OBJECT_PLAYER;
 
 PlayerShip.prototype.hit = function (damage) {
-    return;
-    if (this.board.remove(this)) {
-        loseGame();
+    this.hp -= 10;
+    if (this.hp <= 0) {
+        if (this.board.remove(this)) {
+            loseGame();
+        }
     }
 };
 
@@ -315,6 +484,7 @@ Enemy.prototype.hit = function (damage) {
         app.playSound('explosion4');
         if (this.board.remove(this)) {
             Game.points += this.points || 100;
+            Game.score += this.points || 100;
             this.board.add(new Explosion(this.x + this.w / 2,
                 this.y + this.h / 2));
         }

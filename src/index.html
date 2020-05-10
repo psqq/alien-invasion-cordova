@@ -36,9 +36,16 @@
             <p>
                 Sort by:
                 <select name="select">
-                    <option value="value1">date</option>
-                    <option value="value2" selected>score</option>
-                    <option value="value3">level</option>
+                    <option value="date">date</option>
+                    <option value="score" selected>score</option>
+                    <option value="level">level</option>
+                </select>
+                &nbsp;&nbsp;
+                Difficulty:
+                <select name="select">
+                    <option value="0">Easy</option>
+                    <option value="1" selected>Medium</option>
+                    <option value="2">Hard</option>
                 </select>
             </p>
             <div class="grid center">
@@ -61,10 +68,10 @@
         </div>
     </div>
     <script id="last-and-high-score-template" type="x-tmpl-mustache">
-        <p>Last score: {{ last.score }}</p>
-        <p>Last level: {{ last.level }}</p>
         <p>High score: {{ high.score }}</p>
         <p>High level: {{ high.level }}</p>
+        <p>Last score: {{ last.score }}</p>
+        <p>Last level: {{ last.level }}</p>
     </script>
     <script id="records-tbody-template" type="x-tmpl-mustache">
         {{#all}}

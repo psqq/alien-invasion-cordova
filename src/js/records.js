@@ -21,7 +21,7 @@ export function saveRecords() {
 
 export function init() {
     getRecords();
-    addRecord({ score: 100 + Math.floor(Math.random() * 1000), level: 2 + Math.floor(Math.random() * 100) });
+    // addRecord({ score: 100 + Math.floor(Math.random() * 1000), level: 2 + Math.floor(Math.random() * 100) });
     document.querySelector(".records-btn").addEventListener("click", () => {
         toggle();
     });
