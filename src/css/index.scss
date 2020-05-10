@@ -6,7 +6,6 @@
 }
 
 body {
-    font-family: 'Bangers';
     overflow: hidden;
 }
 
@@ -51,7 +50,7 @@ body {
     @include global-btn;
 }
 
-.score-btn {
+.records-btn {
     @include global-btn;
     top: 50px;
 }
@@ -59,6 +58,7 @@ body {
 #container {
     margin: 0 auto;
     width: 480px;
+    font-family: 'Bangers';
 }
 
 canvas {
@@ -67,6 +67,7 @@ canvas {
 
 #settings {
     z-index: 200;
+    font-family: 'Bangers';
 }
 
 #settings h1 {
@@ -75,5 +76,26 @@ canvas {
 
 #settings p {
     font-size: 25px;
-    padding: 10px;
+}
+
+#records {
+    padding: 15px;
+}
+
+.grid {
+    display: grid;
+}
+
+#records .last-and-high-score p {
+    margin: 5px;
+}
+
+#records .content {
+    justify-items: start;
+}
+
+#records td {
+    padding: 5px;
+    text-align: center;
+    vertical-align: top;
 }

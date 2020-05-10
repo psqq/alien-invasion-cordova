@@ -1,5 +1,6 @@
 import * as sounds from './sounds';
 import * as settings from './settings';
+import * as records from './records';
 import * as joystick from './joystick';
 import * as images from './images';
 
@@ -21,7 +22,7 @@ const app = {
     async init() {
         window.screen.orientation.lock('portrait');
         settings.init();
-        joystick.init();
+        records.init();
     },
     isPortrait() {
         return screen.orientation.type === 'portrait' || screen.orientation.type === 'portrait-primary' || screen.orientation.type === 'portrait-secondary';

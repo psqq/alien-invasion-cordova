@@ -1,7 +1,7 @@
 import * as sounds from './sounds';
+import * as screens from './screens';
 
 
-let settingsShowed = false;
 let settings = {
     soundsVolume: 1,
     musicVolume: 1,
@@ -19,10 +19,13 @@ export function saveSettings() {
 export function applySettings() {
     sounds.setVolumeForGroup('music', settings.musicVolume);
     sounds.setVolumeForGroup('sounds', settings.soundsVolume);
+    document.querySelector("#sounds-volume").value = settings.soundsVolume * 10;
+    document.querySelector("#music-volume").value = settings.musicVolume * 10;
 }
 
 export function init() {
     getSettings();
+    applySettings();
     document.querySelector("#sounds-volume").addEventListener("input", ev => {
         settings.soundsVolume = parseInt(ev.target.value) / 10;
         applySettings();
@@ -34,28 +37,26 @@ export function init() {
         saveSettings();
     });
     document.querySelector(".settings-btn").addEventListener("click", () => {
-        toggleSettings();
+        toggle();
     });
 }
 
-export function showSettings() {
+export function show() {
+    screens.hideAll();
     document.querySelector("#settings").classList.remove('hidden');
-    document.querySelector("#container").classList.add('hidden');
-    settingsShowed = true;
     Game.pause = true;
 }
 
-export function hideSettings() {
-    document.querySelector("#settings").classList.add('hidden');
+export function hide() {
+    screens.hideAll();
     document.querySelector("#container").classList.remove('hidden');
-    settingsShowed = false;
     Game.pause = false;
 }
 
-export function toggleSettings() {
-    if (settingsShowed) {
-        hideSettings();
+export function toggle() {
+    if (document.querySelector("#settings").classList.contains('hidden')) {
+        show();
     } else {
-        showSettings();
+        hide();
     }
 }

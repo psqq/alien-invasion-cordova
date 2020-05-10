@@ -23,22 +23,43 @@
             <input type="range" id="music-volume" min="0" max="10" value="10">
         </div>
     </div>
-    <div id='records' class="black-bg white-text">
-        <h1>Records</h1>
-        <p>Last score: 12000</p>
-        <p>Last level: 4</p>
-        <p>High score: 56000</p>
-        <p>High level: 12</p>
-        <h2>Previous results</h2>
-        Sort:
-        <select name="select">
-            <option value="value1">By date</option>
-            <option value="value2" selected>By score</option>
-            <option value="value3">By level</option>
-        </select>
-        <div>
-            Score:
-            <small>09.05.2020 20:53</small>
+    <div id='records' class="black-bg white-text hidden">
+        <div class="content">
+            <h1>Records</h1>
+            <div class="grid center last-and-high-score">
+                <p>Last score: 12000</p>
+                <p>Last level: 4</p>
+                <p>High score: 56000</p>
+                <p>High level: 12</p>
+            </div>
+            <h2>Previous results</h2>
+            <p>
+                Sort by:
+                <select name="select">
+                    <option value="value1">date</option>
+                    <option value="value2" selected>score</option>
+                    <option value="value3">level</option>
+                </select>
+            </p>
+            <table>
+                <thead>
+                    <th>Date</th>
+                    <th>Score</th>
+                    <th>Level</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>09.05.2020<br>20:53</td>
+                        <td>12000</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>09.05.2020<br>20:53</td>
+                        <td>12000</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div id='container' class="hidden">
@@ -47,8 +68,8 @@
     <div class="settings-btn">
         <img src="assets/images/my-cog.png" alt="cog-icon">
     </div>
-    <div class="score-btn">
-        <img src="assets/images/score-icon.png" alt="score-icon">
+    <div class="records-btn">
+        <img src="assets/images/score-icon.png" alt="records-icon">
     </div>
     <script defer src='assets/js/engine.js'></script>
     <script defer src='assets/js/game.js'></script>
