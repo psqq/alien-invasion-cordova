@@ -195,11 +195,11 @@ function rand(a, b = null) {
 
 function makeRandomLevelRow(prevEnd = 0, lvlNum = 0) {
     let row = [];
-    let sleep = 500 + 100 * rand(0, 3);
+    let sleep = 500 + 100 * rand(-2 - 5 * Game.difficulty, 2);
     let start = prevEnd + sleep;
     let gap = rand(330, 800);
-    const minCount = 1;
-    let count = rand(minCount + 0.8 * lvlNum, minCount + 1 + 1.3 * lvlNum);
+    const minCount = 4;
+    let count = rand(minCount + 0.9 * lvlNum, minCount + 1 + 1.6 * lvlNum);
     let type = '';
     let override = {};
     let end = start + count * gap;
@@ -502,10 +502,9 @@ class LevelMaker {
 }
 
 var playGame = function () {
-    updateHighPoints(Game.points);
     Game.score = 0;
     Game.level = 0;
-    Game.difficulty = 0; // 0, 1 or 2
+    Game.difficulty = app.settings.difficulty; // 0, 1 or 2
     var board = new GameBoard();
     Game.playerShip = new PlayerShip();
     board.add(new PlayerHitPoints(Game.playerShip));
@@ -541,6 +540,7 @@ var loseGame = function () {
     app.addRecord({
         score: Game.score,
         level: Game.level,
+        difficulty: Game.difficulty,
     });
     Game.setBoard(
         3,
@@ -684,6 +684,17 @@ var Enemy = function (blueprint, override) {
     this.y += DY;
     this.x0 = this.x;
     this.y0 = this.y;
+    var newHp = 10;
+    if (Game.difficulty <= 1 && Math.random() < 0.07) {
+        newHp = 20;
+    }
+    if (Game.difficulty <= 2 && Math.random() < 0.08) {
+        newHp = 30;
+    }
+    if (Game.difficulty <= 3 && Math.random() < 0.09) {
+        newHp = Math.random() < 0.5 ? 30 : 40;
+    }
+    this.health = Math.max(this.health, newHp);
 };
 
 Enemy.prototype = new Sprite();
@@ -697,7 +708,7 @@ Enemy.prototype.baseParameters = {
 };
 
 Enemy.prototype.step = function (dt) {
-    this.t += dt;
+    this.t += dt * (1 + 0.3 * Game.difficulty);
 
     // this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
     // this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
@@ -758,7 +769,7 @@ Enemy.prototype.hit = function (damage) {
 };
 
 var EnemyMissile = function (x, y) {
-    this.setup('enemy_missile', { vy: 200, damage: 10 });
+    this.setup('enemy_missile', { vy: 200 + 100 * Game.difficulty, damage: 10 + 2 * Game.difficulty });
     this.x = x - this.w / 2;
     this.y = y;
 };

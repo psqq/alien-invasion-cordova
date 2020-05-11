@@ -16,7 +16,7 @@
    id="SVGRoot"
    sodipodi:docname="left-btn.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   inkscape:export-filename="C:\projects\CordovaProjects\alieninvasion\src\assets\images\left-btn.png"
+   inkscape:export-filename="C:\projects\CordovaProjects\alieninvasion\src\assets\images\attack-btn.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -36,9 +36,9 @@
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
+     inkscape:window-x="-32000"
+     inkscape:window-y="-32000"
+     inkscape:window-maximized="0"
      inkscape:grid-bbox="true"
      inkscape:pagecheckerboard="true">
     <inkscape:grid
@@ -77,8 +77,10 @@
        inkscape:rounded="0"
        inkscape:randomized="0"
        d="m 2.1926328,93.62495 -1e-7,-45.000676 -10e-8,-45.0006733 L 41.164361,26.123939 80.136087,48.624275 41.164359,71.124613 Z"
-       inkscape:transform-center-x="14.923885"
-       transform="matrix(-1.148824,0,0,0.99579917,98.895206,1.585332)"
-       inkscape:transform-center-y="1.7346154e-06" />
+       inkscape:transform-center-x="2.1594849e-06"
+       transform="matrix(0,-1.148824,-0.99579917,0,98.419704,98.624638)"
+       inkscape:transform-center-y="-14.923889"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
 </svg>

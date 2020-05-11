@@ -1,14 +1,18 @@
 import * as sounds from './sounds';
 import * as screens from './screens';
 
-
-let settings = {
+const defaultSettings = {
     soundsVolume: 1,
     musicVolume: 1,
+    difficulty: 1,
 };
+
+let settings = defaultSettings;
 
 export function getSettings() {
     settings = JSON.parse(localStorage.getItem("settings")) || settings;
+    settings = Object.assign({}, defaultSettings, settings);
+    window.app.settings = settings;
     return settings;
 }
 
@@ -36,6 +40,10 @@ export function init() {
         applySettings();
         saveSettings();
     });
+    document.querySelector("#settings .difficulty").addEventListener("input", ev => {
+        settings.difficulty = parseInt(ev.target.value);
+        saveSettings();
+    });
     document.querySelector(".settings-btn").addEventListener("click", () => {
         toggle();
     });
@@ -60,3 +68,6 @@ export function toggle() {
         hide();
     }
 }
+
+window.app = window.app || {};
+window.app.settings = settings;

@@ -21,11 +21,27 @@
             <input type="range" id="sounds-volume" min="0" max="10" value="10">
             <p>Music</p>
             <input type="range" id="music-volume" min="0" max="10" value="10">
+            <p>
+                Difficulty
+            </p>
+            <select class="difficulty" name="select">
+                <option value="0">Easy</option>
+                <option value="1" selected>Medium</option>
+                <option value="2">Hard</option>
+            </select>
         </div>
     </div>
     <div id='records' class="black-bg white-text hidden">
+        <h1>Records</h1>
+        <p>
+            Difficulty:
+            <select class="difficulty">
+                <option value="0">Easy</option>
+                <option value="1" selected>Medium</option>
+                <option value="2">Hard</option>
+            </select>
+        </p>
         <div class="content is-records hidden">
-            <h1>Records</h1>
             <div class="grid center last-and-high-score">
                 <p>Last score: 12000</p>
                 <p>Last level: 4</p>
@@ -35,17 +51,10 @@
             <h2>Previous results</h2>
             <p>
                 Sort by:
-                <select name="select">
+                <select class="sort-by">
                     <option value="date">date</option>
                     <option value="score" selected>score</option>
                     <option value="level">level</option>
-                </select>
-                &nbsp;&nbsp;
-                Difficulty:
-                <select name="select">
-                    <option value="0">Easy</option>
-                    <option value="1" selected>Medium</option>
-                    <option value="2">Hard</option>
                 </select>
             </p>
             <div class="grid center">
@@ -61,7 +70,6 @@
             </div>
         </div>
         <div class="content no-records hidden">
-            <h1>Records</h1>
             <p>
                 No records! You must complete at least one game!
             </p>
