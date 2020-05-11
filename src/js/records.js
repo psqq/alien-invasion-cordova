@@ -19,17 +19,17 @@ export function updateRenderData() {
     const high = maxBy(all, o => o.score);
     all.sort((a, b) => {
         if (records.sortBy == 'level') {
-            return a.level - b.level;
+            return -(a.level - b.level);
         } else if (records.sortBy == 'date') {
-            return a.ts - b.ts;
+            return -(a.ts - b.ts);
         } else {
-            return a.score - b.score;
+            return -(a.score - b.score);
         }
     });
     records.renderData = {
         high,
         last,
-        all: all.slice(0, 3),
+        all: all.slice(0, 10),
     };
 }
 
