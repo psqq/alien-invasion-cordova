@@ -18,7 +18,6 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="Fullscreen" value="true" />
         <preference name="DisallowOverscroll" value="true" />
     </platform>
     <platform name="ios">
