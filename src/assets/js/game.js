@@ -493,6 +493,8 @@ class LevelMaker {
                     this.nextState = 'level-title';
                     Game.level = this.lvlNum;
                     this.lvlNum += 1;
+                    Game.playerShip.hp += 10;
+                    Game.playerShip.hp = Math.min(Game.playerShip.hp, Game.playerShip.maxHp);
                     this.step();
                 }
             );
@@ -626,6 +628,10 @@ var PlayerShip = function () {
     this.x = Game.width / 2 - this.w / 2;
     this.y = Game.height - Game.playerOffset - this.h;
 
+    this.firex = 0;
+    this.firexspeed = 10 + 2 * Game.difficulty;
+    this.firexmax = 150;
+
     Game.playerShip = this;
 
     this.step = function (dt) {
@@ -634,6 +640,11 @@ var PlayerShip = function () {
         else { this.vx = 0; }
 
         this.x += this.vx * dt;
+
+        this.firex += this.firexspeed * dt;
+        if (Math.abs(this.firex) > this.firexmax) {
+            this.firexspeed = -this.firexspeed;
+        }
 
         if (this.x < 0) { this.x = 0; }
         else if (this.x > Game.width - this.w) {
@@ -645,8 +656,12 @@ var PlayerShip = function () {
             app.playSound('fire');
             this.reload = this.reloadTime;
 
-            this.board.add(new PlayerMissile(this.x, this.y + this.h / 2));
-            this.board.add(new PlayerMissile(this.x + this.w, this.y + this.h / 2));
+            this.board.add(new PlayerMissile(this.x, this.y + this.h / 2, {
+                vx: -this.firex,
+            }));
+            this.board.add(new PlayerMissile(this.x + this.w, this.y + this.h / 2, {
+                vx: this.firex,
+            }));
         }
     };
 };
@@ -659,8 +674,12 @@ PlayerShip.prototype.hit = function (damage) {
 };
 
 
-var PlayerMissile = function (x, y) {
-    this.setup('missile', { vy: -700, damage: 10 });
+var PlayerMissile = function (x, y, override) {
+    this.setup('missile', {
+        vy: -700,
+        damage: 10,
+        ...override,
+    });
     this.x = x - this.w / 2;
     this.y = y - this.h;
 };
@@ -670,6 +689,7 @@ PlayerMissile.prototype.type = OBJECT_PLAYER_PROJECTILE;
 
 PlayerMissile.prototype.step = function (dt) {
     this.y += this.vy * dt;
+    this.x += this.vx * dt;
     var collision = this.board.collide(this, OBJECT_ENEMY);
     if (collision) {
         collision.hit(this.damage);
