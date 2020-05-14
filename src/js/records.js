@@ -19,17 +19,17 @@ export function updateRenderData() {
     const high = maxBy(all, o => o.score);
     all.sort((a, b) => {
         if (records.sortBy == 'level') {
-            return a.level - b.level;
+            return -(a.level - b.level);
         } else if (records.sortBy == 'date') {
-            return a.ts - b.ts;
+            return -(a.ts - b.ts);
         } else {
-            return a.score - b.score;
+            return -(a.score - b.score);
         }
     });
     records.renderData = {
         high,
         last,
-        all: all.slice(0, 3),
+        all: all.slice(0, 5),
     };
 }
 
@@ -49,9 +49,18 @@ export function init() {
         toggle();
     });
     document.querySelector("#records .difficulty").addEventListener("click", (ev) => {
+        records.difficulty = parseInt(document.querySelector("#records .difficulty").value);
+        saveRecords();
         render();
     });
     document.querySelector("#records .sort-by").addEventListener("click", (ev) => {
+        records.sortBy = document.querySelector("#records .sort-by").value;
+        saveRecords();
+        render();
+    });
+    document.querySelector("#records .clear-this-difficulty").addEventListener("click", (ev) => {
+        records.all = records.all.filter(x => x.difficulty != records.difficulty);
+        saveRecords();
         render();
     });
 }
@@ -59,8 +68,8 @@ export function init() {
 export function render() {
     document.querySelector("#records .is-records").classList.add('hidden');
     document.querySelector("#records .no-records").classList.add('hidden');
-    records.difficulty = parseInt(document.querySelector("#records .difficulty").value);
-    records.sortBy = document.querySelector("#records .sort-by").value;
+    document.querySelector("#records .difficulty").value = records.difficulty;
+    document.querySelector("#records .sort-by").value = records.sortBy;
     updateRenderData();
     if (records.renderData.all.length > 0) {
         document.querySelector("#records .is-records").classList.remove('hidden');

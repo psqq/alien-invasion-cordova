@@ -25,6 +25,7 @@ export function applySettings() {
     sounds.setVolumeForGroup('sounds', settings.soundsVolume);
     document.querySelector("#sounds-volume").value = settings.soundsVolume * 10;
     document.querySelector("#music-volume").value = settings.musicVolume * 10;
+    document.querySelector("#settings .difficulty").value = settings.difficulty;
 }
 
 export function init() {

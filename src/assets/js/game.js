@@ -614,7 +614,13 @@ var Starfield = function (speed, opacity, numStars, clear) {
 };
 
 var PlayerShip = function () {
-    this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200, hp: 30, maxHp: 100 });
+    this.setup('ship', {
+        vx: 0,
+        reloadTime: 0.25 + 0.02 * (4 - Game.difficulty),
+        maxVel: 200 + 2 * Game.difficulty,
+        hp: 30 + 5 * Game.difficulty,
+        maxHp: 100
+    });
 
     this.reload = this.reloadTime;
     this.x = Game.width / 2 - this.w / 2;
@@ -685,14 +691,31 @@ var Enemy = function (blueprint, override) {
     this.x0 = this.x;
     this.y0 = this.y;
     var newHp = 10;
-    if (Game.difficulty <= 1 && Math.random() < 0.07) {
-        newHp = 20;
-    }
-    if (Game.difficulty <= 2 && Math.random() < 0.08) {
-        newHp = 30;
-    }
-    if (Game.difficulty <= 3 && Math.random() < 0.09) {
-        newHp = Math.random() < 0.5 ? 30 : 40;
+    var a = [
+        {
+            hp: 20,
+            chanceByDifficulty: [10, 20, 30, 45, 60]
+        },
+        {
+            hp: 30,
+            chanceByDifficulty: [5, 10, 20, 30, 40]
+        },
+        {
+            hp: 40,
+            chanceByDifficulty: [5, 10, 15, 20, 25]
+        },
+        {
+            hp: 50,
+            chanceByDifficulty: [2, 4, 8, 12, 15]
+        },
+    ];
+    for (let o of a) {
+        if (Math.random() < o.chanceByDifficulty[Game.difficulty] / 100) {
+            newHp = o.hp;
+            if (Math.random() < 0.5) {
+                break;
+            }
+        }
     }
     this.health = Math.max(this.health, newHp);
 };
@@ -703,12 +726,12 @@ Enemy.prototype.type = OBJECT_ENEMY;
 Enemy.prototype.baseParameters = {
     A: 0, B: 0, C: 0, D: 0,
     E: 0, F: 0, G: 0, H: 0,
-    t: 0, reloadTime: 0.75,
+    t: 0, reloadTime: 0.75 - Game.difficulty * 0.05,
     reload: 0
 };
 
 Enemy.prototype.step = function (dt) {
-    this.t += dt * (1 + 0.3 * Game.difficulty);
+    this.t += dt * (1 + 0.4 * Game.difficulty);
 
     // this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
     // this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
@@ -769,7 +792,7 @@ Enemy.prototype.hit = function (damage) {
 };
 
 var EnemyMissile = function (x, y) {
-    this.setup('enemy_missile', { vy: 200 + 100 * Game.difficulty, damage: 10 + 2 * Game.difficulty });
+    this.setup('enemy_missile', { vy: 200 + 150 * Game.difficulty, damage: 10 + 2 * Game.difficulty });
     this.x = x - this.w / 2;
     this.y = y;
 };

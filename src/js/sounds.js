@@ -59,7 +59,6 @@ export function setVolumeForGroup(groupName, volume = 1) {
     }
 }
 
-
 export function toggleMuteAll() {
     Howler.mute(muteFlag);
     muteFlag = !muteFlag;
