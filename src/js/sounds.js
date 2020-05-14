@@ -64,6 +64,14 @@ export function toggleMuteAll() {
     muteFlag = !muteFlag;
 }
 
+export function muteAll() {
+    Howler.mute(true);
+}
+
+export function unmuteAll() {
+    Howler.mute(false);
+}
+
 window.app = window.app || {};
 window.app.playSound = play;
 window.app.sounds = sounds;

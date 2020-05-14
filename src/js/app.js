@@ -23,6 +23,14 @@ const app = {
         window.screen.orientation.lock('portrait');
         settings.init();
         records.init();
+        document.addEventListener('pause', () => {
+            sounds.muteAll();
+            Game.pause = true;
+        });
+        document.addEventListener('resume', () => {
+            sounds.unmuteAll();
+            Game.pause = false;
+        });
     },
     isPortrait() {
         return screen.orientation.type === 'portrait' || screen.orientation.type === 'portrait-primary' || screen.orientation.type === 'portrait-secondary';
