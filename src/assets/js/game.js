@@ -641,7 +641,7 @@ var PlayerShip = function () {
         }
 
         this.reload -= dt;
-        if (Game.keys['fire'] && this.reload < 0) {
+        if ((Game.keys['fire'] || (app.settings.shootingMode && Game.keys['switchable-fire'])) && this.reload < 0) {
             app.playSound('fire');
             this.reload = this.reloadTime;
 

@@ -376,6 +376,8 @@ var TouchControls = function () {
     var rightBtnImg = app.images["right-btn"].img;
     var attackBtnImg = app.images["attack-btn"].img;
 
+    Game.keys['switchable-fire'] = true;
+
     this.drawSquare = function (ctx, x, y, txt, on) {
         ctx.globalAlpha = on ? 0.9 : 0.6;
         if (txt === "\u25C0") {
@@ -458,6 +460,9 @@ var TouchControls = function () {
                 x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
                 if (x > 4 * unitWidth) {
                     Game.keys['fire'] = (e.type == 'touchstart');
+                    if (e.type == 'touchend') {
+                        Game.keys['switchable-fire'] = !Game.keys['switchable-fire'];
+                    }
                 }
             }
         }
