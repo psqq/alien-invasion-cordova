@@ -9,7 +9,7 @@ let records = {
     last: null,
     all: [],
     difficulty: 0,
-    sortBy: '',
+    sortBy: 'score',
     renderData: {},
 };
 
@@ -48,12 +48,12 @@ export function init() {
     document.querySelector(".records-btn").addEventListener("click", () => {
         toggle();
     });
-    document.querySelector("#records .difficulty").addEventListener("click", (ev) => {
+    document.querySelector("#records .difficulty").addEventListener("input", (ev) => {
         records.difficulty = parseInt(document.querySelector("#records .difficulty").value);
         saveRecords();
         render();
     });
-    document.querySelector("#records .sort-by").addEventListener("click", (ev) => {
+    document.querySelector("#records .sort-by").addEventListener("input", (ev) => {
         records.sortBy = document.querySelector("#records .sort-by").value;
         saveRecords();
         render();
@@ -68,7 +68,7 @@ export function init() {
 export function render() {
     document.querySelector("#records .is-records").classList.add('hidden');
     document.querySelector("#records .no-records").classList.add('hidden');
-    document.querySelector("#records .difficulty").value = records.difficulty;
+    document.querySelector("#records .difficulty").value = "" + records.difficulty;
     document.querySelector("#records .sort-by").value = records.sortBy;
     updateRenderData();
     if (records.renderData.all.length > 0) {
