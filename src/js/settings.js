@@ -5,6 +5,7 @@ const defaultSettings = {
     soundsVolume: 1,
     musicVolume: 1,
     difficulty: 1,
+    shootingMode: true,
 };
 
 let settings = defaultSettings;
@@ -39,6 +40,10 @@ export function init() {
     document.querySelector("#music-volume").addEventListener("input", ev => {
         settings.musicVolume = parseInt(ev.target.value) / 10;
         applySettings();
+        saveSettings();
+    });
+    document.querySelector("#settings .shooting-mode").addEventListener("input", ev => {
+        settings.shootingMode = ev.target.checked;
         saveSettings();
     });
     document.querySelector("#settings .difficulty").addEventListener("input", ev => {
